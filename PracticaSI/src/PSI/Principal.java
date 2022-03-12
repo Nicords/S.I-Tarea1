@@ -4,9 +4,12 @@
  */
 package PSI;
 
+import static PSI.Principal.probabilidad;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
 
 /**
@@ -21,7 +24,7 @@ public class Principal {
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
         
-        String caracteres= "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZáéíóúÁÉÍÓÚ.,;:-_()'+*ü ";
+        //String caracteres= "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZáéíóúÁÉÍÓÚ.,;:-_()'+*ü ";
         Scanner lector = new Scanner(System.in);
         
         System.out.println("Elegir modo, 1= lista de probabilidades, 2= lista de frecuencias, 3= texto");
@@ -38,7 +41,8 @@ public class Principal {
                 probabilidades = Ficheros.leerFicheroProbabilidades("C:\\Users\\nicoo\\Desktop\\Universidad\\3º carrera\\Seguridad informática\\P2\\probabilidad.txt", probabilidades);
                 
                 for (int i = 0; i<probabilidades.size();i++){
-                    solucion.add(new Caracter((char)(i+65), (int) ((float) probabilidades.get(i) *100), (float) probabilidades.get(i), codificacion )); 
+                    BigDecimal pro = new BigDecimal("probabilidades.get(i)");
+                    solucion.add(new Caracter((char)(i+65), (int) ((float) probabilidades.get(i) *100),pro , codificacion )); 
                 }
                 
                 Huffman.metodoHuffman(solucion);
@@ -56,7 +60,7 @@ public class Principal {
                 }
                 
                 for (int i = 0; i<frecuencias.size();i++){
-                    float probabilidad = probabilidad((int) frecuencias.get(i), longitud);
+                    BigDecimal probabilidad = probabilidad((int) frecuencias.get(i), longitud);
                     solucion.add(new Caracter((char)(i+65),(int) frecuencias.get(i), probabilidad, codificacion)); 
                 }
                 
@@ -66,17 +70,47 @@ public class Principal {
                 
             case 3 -> {
                 String texto = Ficheros.leerFichero("C:\\Users\\nicoo\\Desktop\\Universidad\\3º carrera\\Seguridad informática\\P2\\texto.txt");
-               
-                for (int i = 0; i< caracteres.length(); i ++){
-                  
-                    int cantidad = frecuencia(caracteres.charAt(i), texto);
-                    float probabilidad = probabilidad(cantidad, texto.length());
+                String caracteres="";
+                int var = 0;
+                for (int i = 0; i< texto.length(); i ++){
+                    if(caracteres.length()==0){
+                        caracteres +=texto.charAt(i);
+                        var =1;
+                    }
+                    else{
+                        for(int j=0; j<caracteres.length(); j++){
+                            if(texto.charAt(i) == caracteres.charAt(j)){
+                                var = 1;
+                            }
+                            if(j==caracteres.length()-1 && var==0){
+                                caracteres +=texto.charAt(i);
+                            }
+                        }
+                    }
+                    var = 0;
+                }
                 
+                for (int i = 0; i<caracteres.length(); i++){
+                    int cantidad = frecuencia(caracteres.charAt(i), texto);
+                    BigDecimal probabilidad = probabilidad(cantidad, texto.length());
                     if(cantidad != 0){
                         solucion.add(new Caracter((caracteres.charAt(i)), cantidad , probabilidad, codificacion));
                     }  
                 }
                 
+                Scanner lector2 = new Scanner(System.in);
+                System.out.println("Desea decodificar parte del mensaje? 1 = si, 2= no");
+                int opcion2 = lector2.nextInt();
+                
+                if(opcion2 == 1){
+                    System.out.println("Introduzca la longitud del mensaje");
+                    int longitudMensaje = lector2.nextInt();
+                    BigDecimal codificacionB10 = new BigDecimal ("0.247276109705412160222");
+                    String mensaje = P3.decodificar(longitudMensaje,codificacionB10,solucion); 
+                    System.out.println();
+                    System.out.println("El mensaje es: " +mensaje);
+                    System.out.println();
+                }
                 Huffman.metodoHuffman(solucion);
                 resultados(solucion);
             }
@@ -98,8 +132,10 @@ public class Principal {
         return num;
     }
       
-    public static float probabilidad (float cantidad, int longitud ){    
-        float pro = cantidad /longitud;
+    public static BigDecimal probabilidad (float cantidad, int longitud ){    
+   
+        
+        BigDecimal pro = new BigDecimal(cantidad).divide(new BigDecimal(longitud), 100, RoundingMode.HALF_UP);
         
         return pro;
     }
@@ -108,7 +144,8 @@ public class Principal {
         float entropia =0;
        
         for(int i = 0 ; i<solucion.size(); i++){
-            float probabilidad = solucion.get(i).getProbabilidad();
+            
+            float probabilidad = solucion.get(i).getProbabilidad().floatValue();
             entropia+=probabilidad*(Math.log(1.0/probabilidad)/Math.log(2));
         }
 
@@ -124,7 +161,8 @@ public class Principal {
         float longitudMedia = 0;
         
         for(int i = 0; i<solucion.size(); i++){
-            longitudMedia += solucion.get(i).getCodificacion().length() * solucion.get(i).getProbabilidad();
+            float probabilidad = solucion.get(i).getProbabilidad().floatValue();
+            longitudMedia += solucion.get(i).getCodificacion().length() * probabilidad;
         }
         return longitudMedia;
     }
@@ -145,6 +183,6 @@ public class Principal {
         System.out.println();
         System.out.println("La longitud media es " + longitudMedia);
         System.out.println();
-        System.out.println("La efcicacia es " + eficacia);
+        System.out.println("La eficacia es " + eficacia);
     }
 }

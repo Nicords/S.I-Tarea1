@@ -4,6 +4,8 @@
  */
 package PSI;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author nicoo
@@ -12,10 +14,10 @@ class Caracter implements Comparable<Caracter> {
     
     private  char caracter;
     private  int frecuencia;
-    private  float probabilidad;
+    private  BigDecimal probabilidad;
     private  String codificacion;
     
-    public Caracter(char caracter, int frecuencia, float probabilidad, String codificacion) {
+    public Caracter(char caracter, int frecuencia, BigDecimal probabilidad, String codificacion) {
 	this.caracter = caracter;
 	this.frecuencia = frecuencia;
         this.probabilidad =  probabilidad;
@@ -30,7 +32,7 @@ class Caracter implements Comparable<Caracter> {
 	return frecuencia;
     }
     
-    public float getProbabilidad() {
+    public BigDecimal getProbabilidad() {
 	return probabilidad;
     }
     
@@ -44,9 +46,9 @@ class Caracter implements Comparable<Caracter> {
 
     @Override
     public int compareTo(Caracter o) {
-        if(o.getProbabilidad()>probabilidad){
+        if((o.getProbabilidad()).compareTo(probabilidad)>0){
             return 1;
-        }else if(o.getProbabilidad()==probabilidad){
+        }else if((o.getProbabilidad()).compareTo(probabilidad)==0){
             return 0;
         }else{
             return -1;
@@ -55,6 +57,6 @@ class Caracter implements Comparable<Caracter> {
     
     @Override
     public String toString() {
-        return "Caracter : " + caracter + "    frecuencia : " + frecuencia + "    probabilidad : " + probabilidad + "    codificacion : " + codificacion;
+        return "Caracter : " + caracter + "    frecuencia : " + frecuencia + "    probabilidad : " + probabilidad.floatValue() + "    codificacion : " + codificacion;
     } 
 }
