@@ -25,6 +25,7 @@ public class P3 {
             for (int j=0; j<solucion.size(); j++){
                 prob = prob.add(solucion.get(j).getProbabilidad());
                 if(numero.compareTo(prob)<0 ){
+                    System.out.println(numero);
                     texto +=  solucion.get(j).getCaracter();
                     amplitud = solucion.get(j).getProbabilidad();
                     prob = prob.subtract(solucion.get(j).getProbabilidad());

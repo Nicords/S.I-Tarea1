@@ -30,7 +30,7 @@ public class Huffman {
         if (root.left == null && root.right == null ) {
             for(int i = 0; i<solucion.size(); i++){
                 if(root.caracter == solucion.get(i).getCaracter()){
-                    solucion.get(i).setCodificacion(s);
+                    solucion.get(i).setCodificacionHuffman(s);
                 }
             }
             return;

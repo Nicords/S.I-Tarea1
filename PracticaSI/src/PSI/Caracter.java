@@ -15,13 +15,15 @@ class Caracter implements Comparable<Caracter> {
     private  char caracter;
     private  int frecuencia;
     private  BigDecimal probabilidad;
-    private  String codificacion;
+    private  String codificacionHuffman;
+    private  String codificacionBL;
     
-    public Caracter(char caracter, int frecuencia, BigDecimal probabilidad, String codificacion) {
+    public Caracter(char caracter, int frecuencia, BigDecimal probabilidad, String codificacionHuffman, String codificacionBL) {
 	this.caracter = caracter;
 	this.frecuencia = frecuencia;
         this.probabilidad =  probabilidad;
-        this.codificacion = codificacion;
+        this.codificacionHuffman = codificacionHuffman;
+        this.codificacionBL = codificacionBL;
     }
     
     public char getCaracter() {
@@ -36,14 +38,22 @@ class Caracter implements Comparable<Caracter> {
 	return probabilidad;
     }
     
-    public String getCodificacion(){
-        return codificacion;
+    public String getCodificacionHuffman(){
+        return codificacionHuffman;
     }
     
-    public void setCodificacion(String codificacion){
-        this.codificacion = codificacion;
+    public void setCodificacionHuffman(String codificacionHuffman){
+        this.codificacionHuffman = codificacionHuffman;
     }
 
+    public String getCodificacionBL(){
+        return codificacionBL;
+    }
+    
+    public void setCodificacionBL(String codificacionBL){
+        this.codificacionBL = codificacionBL;
+    }
+    
     @Override
     public int compareTo(Caracter o) {
         if((o.getProbabilidad()).compareTo(probabilidad)>0){
@@ -57,6 +67,6 @@ class Caracter implements Comparable<Caracter> {
     
     @Override
     public String toString() {
-        return "Caracter : " + caracter + "    frecuencia : " + frecuencia + "    probabilidad : " + probabilidad.floatValue() + "    codificacion : " + codificacion;
+        return "Caracter : " + caracter + "    frecuencia : " + frecuencia + "    probabilidad : " + probabilidad.floatValue() + "    codificacion Huffman : " + codificacionHuffman + "    codificacion binariaLineal : " + codificacionBL;
     } 
 }
