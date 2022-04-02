@@ -111,7 +111,7 @@ public class Principal {
                 if(opcion2 == 1){
                     System.out.println("Introduzca la longitud del mensaje");
                     int longitudMensaje = lector2.nextInt();
-                    BigDecimal codificacionB10 = new BigDecimal ("0.96402816270036736770957975564255630564009");
+                    BigDecimal codificacionB10 = new BigDecimal ("0.78195382101964290078842");
                     String mensaje = P3.decodificar(longitudMensaje,codificacionB10,solucion); 
                     System.out.println();
                     System.out.println("El mensaje de codificacion aritmetica (en base 10) es: " +mensaje);
